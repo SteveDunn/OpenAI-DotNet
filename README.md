@@ -29,7 +29,7 @@ Install-Package OpenAI-DotNet
 Uses the default authentication from the current directory, the default user directory or system environment variables
 
 ```csharp
-OpenAI api = new OpenAI(Engine.Davinci);
+OpenAIClient api = new OpenAIClient(new Engine(Engine.Davinci));
 ```
 
 ### Authentication
@@ -55,7 +55,7 @@ OpenAI api = new OpenAI("sk-mykeyhere");
 #### Create a `Authentication` object manually
 
 ```chsarp
-OpenAI api = new OpenAI(new Authentication("sk-secretkey"));
+OpenAIClient api = new(new OpenAIAuthentication("sk-secretkey"), new Engine(Engine.Davinci));
 ```
 
 #### Use System Environment Variables
@@ -63,7 +63,7 @@ OpenAI api = new OpenAI(new Authentication("sk-secretkey"));
 > Use `OPENAI_KEY` or `OPENAI_SECRET_KEY` specify a key defined in the system's local environment:
 
 ```chsarp
-OpenAI api = new OpenAI(Authentication LoadFromEnv());
+OpenAIClient api = new(OpenAIAuthentication.LoadFromEnv(), new Engine(Engine.Davinci));
 ```
 
 #### Load key from specified directory
@@ -71,7 +71,7 @@ OpenAI api = new OpenAI(Authentication LoadFromEnv());
 > Attempts to load api keys from a configuration file, by default `.openai` in the current directory, optionally traversing up the directory tree.
 
 ```chsarp
-OpenAI api = new OpenAI(Authentication.LoadFromDirectory("C:\\MyProject"));;
+OpenAIClient api = new(OpenAIAuthentication.LoadFromDirectory("C:\\MyProject"), new Engine(Engine.Davinci));
 ```
 
 ### Completions
@@ -90,7 +90,7 @@ Console.WriteLine(result);
 Streaming allows you to get results are they are generated, which can help your application feel more responsive, especially on slow models like Davinci.
 
 ```csharp
-var api = new OpenAI();
+var api = new OpenAIClient();
 await api.CompletionEndpoint.StreamCompletionAsync(result =>
 {
     foreach (var choice in result.Completions)
